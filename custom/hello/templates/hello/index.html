@@ -1,0 +1,18 @@
+{% extends 'custom/base.html' %}
+{% load i18n %}
+{% block title %}{% trans "Hello" %}{% endblock %}
+
+{% block page_header %}
+  {% include "horizon/common/_page_header.html" with title=_("Hello") %}
+{% endblock page_header %}
+
+{% block custom_main %}
+{% if keystone_url %}{{ keystone_url | safe }}{% endif %}
+{% if hello_msg %}
+  {{ hello_msg }}
+{% else %}
+  hello_msg is empty.
+{% endif %}
+{% endblock %}
+
+
