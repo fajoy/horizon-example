@@ -22,8 +22,6 @@ class IndexView(tables.DataTableView):
 
 
 from horizon import workflows,forms
-from django.utils.translation import ugettext_lazy as _
-
 class MyAction(workflows.Action):
     f1 = forms.Field(label=("Field1"),
                      required=False,
@@ -43,8 +41,6 @@ class Step(workflows.Step):
         context ['msg'] = data.get("f1", "")
         return context
 
-
-
 class Workflow(workflows.Workflow):
     slug = "workflow"
     name = "MyDataWorkFlow"
@@ -54,7 +50,7 @@ class Workflow(workflows.Workflow):
     success_url = "horizon:custom:tables:data"
     default_steps = (Step,)
     def format_status_message(self, message):
-        return message % self.context.get('id', 'unknown')
+        return message % self.context.get('msg', 'unknown')
 
     def handle(self, request, context):
         import uuid
@@ -79,7 +75,6 @@ class BtnCreate(tables.LinkAction):
     url = "horizon:custom:tables:create"
     classes = ("ajax-modal", "btn-create")
 
-from django import shortcuts
 class BtnDelete(tables.BatchAction):
     name = "delete"
     action_present = "Delete"
@@ -97,7 +92,6 @@ class BtnDelete(tables.BatchAction):
     def action(self, request, obj_id):
         request.session.get("mydata",{})
         del request.session["mydata"][obj_id]
-        return shortcuts.redirect(self.get_success_url(request))
 
     def get_success_url(self, request=None):
         return request.get_full_path()
